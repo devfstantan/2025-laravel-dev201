@@ -1,0 +1,35 @@
+.stock{
+    border: 1px solid black;
+    padding: 5px 10px;
+    display: inline-block;
+}
+.stock-success{
+    border-color: green;
+    color: green;
+}
+.stock-warning{
+    border-color: orange;
+    color: orange;
+}
+.stock-danger{
+    border-color: red;
+    color: red;
+}
+
+.card{
+    border: 1px solid black;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.btn{
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: blue;
+    color: white;
+    border: none;
+}
+.btn.btn-secondary{
+    background-color: yellow;
+    color: black;
+}

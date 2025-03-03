@@ -32,3 +32,21 @@ Route::get('/blade-demo', function(){
     return view('demo.blade-demo',compact('nom','comment','produits'));
 });
 
+
+Route::get('/produits', function(){
+    $produits = [
+        ['title' => 'Produit1', 'price' => 100, 'stock' => 10],
+        ['title' => 'Produit2', 'price' => 10, 'stock' => 0],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 9],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+    ];
+
+    return view('produits.index', compact('produits'));
+});
+
