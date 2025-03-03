@@ -9,40 +9,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
 
-// redirection
-Route::redirect('/hello-old', '/hello', 301);
-
-Route::get('/hello', function () {
-    return view('hello');
-})->name('hello');
-
-Route::post('/login', function (Request $request) {
-    $username = $request->username;
-    $password = $request->password;
-    return "Login : $username / $password";
-})->name('login');
-
-Route::prefix('/product')->name('product.')->group(function(){
-    Route::get('/{id}', function (int $id) {
-        return "Product Number: $id";
-    })->where('id','[0-9]+')->name('byid');
-
-    Route::get('/{name}', function (string $name) {
-        return "Product String: $name";
-    })->where('name','[a-zA-Z]+')->name('byname');
-    
-    Route::get(
-        '/{productId}/comment/{commentId}',
-        function (int $productId, int $commentId) {
-            return "Comment: $commentId of Product $productId";
-        }
-    )->name('comment');
-    
-    Route::get(
-        '/{id}/share/{socialNetwork?}',
-        function (int $id, string $socialNetwork = "facebook") {
-            return "Share: $socialNetwork of Product $id";
-        }
-    )->name('share');
+Route::get('/blade-demo', function(){
+    $nom = "DEV201";
+    $comment = "<p>Attaque XSS </p> <script>console.log('i got all your cookies')</script>";
+    $produits = [
+        ['title' => 'Produit1', 'price' => 100, 'stock' => 10],
+        ['title' => 'Produit2', 'price' => 10, 'stock' => 0],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 9],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
+    ];
+    // return view('demo.blade-demo',[
+    //     "nom" => $nom,
+    //     "comment" => $comment,
+    //      "produits" =>$produits
+    // ]);
+    return view('demo.blade-demo',compact('nom','comment','produits'));
 });
 
