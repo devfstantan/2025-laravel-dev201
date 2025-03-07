@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\Admin\ProduitController as AdminProduitController;
+use App\Http\Controllers\User\ProduitController as UserProduitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,21 +36,19 @@ Route::get('/blade-demo', function(){
     return view('demo.blade-demo',compact('nom','comment','produits'));
 });
 
+// page liste produits
+Route::get(
+    '/produits', 
+    [ProduitController::class, 'listProduits']
+);
 
-Route::get('/produits', function(){
-    $produits = [
-        ['title' => 'Produit1', 'price' => 100, 'stock' => 10],
-        ['title' => 'Produit2', 'price' => 10, 'stock' => 0],
-        ['title' => 'Produit3', 'price' => 200, 'stock' => 9],
-        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
-        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
-        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
-        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
-        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
-        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
-        ['title' => 'Produit3', 'price' => 200, 'stock' => 100],
-    ];
+// page formulaire creation produit
+Route::get('/produits/create',[ProduitController::class, 'create']);
 
-    return view('produits.index', compact('produits'));
-});
 
+Route::resource("/categories",CategoryController::class)
+    // ->except(["create", "store"])
+    ->only(['index','show']);
+
+Route::resource('/admin/produits',AdminProduitController::class);
+Route::resource('user/produits',UserProduitController::class);
