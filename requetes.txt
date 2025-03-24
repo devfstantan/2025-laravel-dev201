@@ -1,0 +1,62 @@
+Exercice:
+-----------
+champs: title, price, stock, en_promotion, code, status
+, categorie_id
+Donner les requêtes pour :
+1- lister tous les produits
+DB::table('produits')->get();
+
+2- récupérer le produit ayant l'id 20.
+DB::table('produits')->where('id',20)->get();
+
+3- récupérer le nombre des produits en promotion.
+DB::table('produits')
+->where('en_promotion',true)
+->count();
+
+4- récupérer les produit hors stock (stock = 0)
+DB::table('produits')
+->where('stock',0)
+->get();
+5- récupérer les produits en promotion et dont le stock inférieur
+   à 10.
+DB::table('produits')
+->where('en_promotion',true)
+->where('stock','<',10)
+->get();
+
+6- récupérer les produits dont le titre contient "PC".
+DB::table('produits')
+->where('title','like','%PC%')
+->get();
+7- récupérer le produit le plus chère.
+DB::table('produits')
+->orderBy('price','desc')
+->first();
+
+DB::table('produits')
+->latest('price')
+->first();
+
+8- récupérer  la liste des  produits dont :
+     - le prix entre 100 et 1000
+     - et en promotion
+DB::table('produits')
+->whereBetween('price',[100,1000])
+->where('en_promotion',true)
+->get();
+
+9- récupérer les 10 produits les plus récents en promotion.
+DB::table('produits')
+->where('en_promotion',true)
+->latest()
+->limit(10)
+->get();
+10- récupérer la quantité des produits en promotion pour chaque
+   catégorie.
+DB::table('produits')
+->selectRaw("sum('stock') as quantite, categorie_id")
+->where('en_promotion', true)
+->groupBy('categorie_id)
+->get();
+     
