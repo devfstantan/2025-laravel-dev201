@@ -13,7 +13,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        dd($categories);
+        return view('categories.index', compact('categories'));
     }
 
     /**
@@ -21,7 +21,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
     /**
@@ -29,7 +29,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $category = new Category();
+        // $category->name = $request->get('name');
+        // $category->save();
+
+        $category = Category::create($request->all());
+
+        return to_route('categories.index');
     }
 
     /**
@@ -37,7 +43,8 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return view('categories.show',compact('category'));
     }
 
     /**
@@ -45,7 +52,8 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return view('categories.edit',compact('category'));
     }
 
     /**
@@ -53,7 +61,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->update($request->all());
+
+        return to_route('categories.index');
     }
 
     /**
@@ -61,6 +72,12 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // $category = Category::findOrFail($id);
+        // $category->delete();
+
+        Category::destroy($id);
+
+        return to_route('categories.index');
+        
     }
 }
