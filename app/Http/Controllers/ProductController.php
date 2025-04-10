@@ -12,8 +12,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        dd($products);
+        $products = Product::orderBy('title')->paginate();
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -21,7 +21,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -29,7 +29,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request['is_promo'] = isset($request['is_promo'] );
+        Product::create($request->all());
+        return to_route('products.index');
     }
 
     /**
@@ -37,7 +39,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('products.show',compact('product'));
     }
 
     /**
@@ -45,15 +48,21 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('products.edit',compact('product'));
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        $request['is_promo'] = isset($request['is_promo'] );
+        $product->update($request->all());
+        
+        return to_route('products.index');
     }
 
     /**
@@ -61,6 +70,7 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Product::destroy($id);
+        return to_route('products.index');
     }
 }
