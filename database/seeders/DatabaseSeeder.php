@@ -13,15 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $users = User::factory(10)->create();
+        foreach($users as $u){
+            $u->profile()->create([
+                  'cin' => 'JF 12345',
+            'birth_city' => 'Tantan'
+            ]);
+        }
 
-        User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+        $user->profile()->create([
+            'cin' => 'JF 12345',
+            'birth_city' => 'Tantan'
+        ]);
 
         // appel Seeder des catégories ensuite celui des produits
-        (new CategorySeeder())->run();
-        (new ProductSeeder())->run();
+        $this->call(CategorySeeder::class);
+        $this->call(ProductSeeder::class);
     }
 }
