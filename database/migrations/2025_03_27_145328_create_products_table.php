@@ -21,6 +21,8 @@ return new class extends Migration
             $table->enum('status', ['draft','in_review','published'])
             ->default('draft');
             $table->timestamp('published_at')->nullable();
+            $table->foreignId('category_id')->nullable()
+                  ->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

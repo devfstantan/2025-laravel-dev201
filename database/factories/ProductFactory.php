@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,6 +25,7 @@ class ProductFactory extends Factory
             'description' => fake()->paragraph(),
             'status' => fake()->randomElement(['draft','in_review','published']),
             'published_at' => fake()->date(),
+            "category_id" => Category::inRandomOrder()->first()->id,
         ];
     }
 }

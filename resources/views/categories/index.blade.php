@@ -7,6 +7,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
+                <th>Nombre Produits</th>
                 <th>
                     <a href="{{route('categories.create')}}">
                         Nouvelle Catégorie
@@ -23,6 +24,7 @@
                             {{$cat->name}}
                         </a>
                     </td>
+                    <td>{{$cat->products_count}}</td>
                     <td>
                         {{-- Lien vers edit --}}
                         <a href="{{route('categories.edit',$cat->id)}}">

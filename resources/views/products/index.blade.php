@@ -11,6 +11,7 @@
             <tr>
                 <th></th>
                 <th>titre</th>
+                <th>Catégorie</th>
                 <th>prix</th>
                 <th>stock</th>
                 <th>En Promotion?</th>
@@ -25,6 +26,9 @@
                         <a href="{{route('products.show',$product->id)}}">
                             {{ $product->title }}
                         </a>
+                    </td>
+                    <td>
+                        {{$product->category->name}}
                     </td>
                     <td> <x-product-price :value="$product->price" /></td>
                     <td> <x-product-stock :value="$product->stock" /> </td>

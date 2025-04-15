@@ -12,7 +12,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('title')->paginate();
+        $products = Product::with('category')->orderBy('title')->paginate();
         return view('products.index', compact('products'));
     }
 
