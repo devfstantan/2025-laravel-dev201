@@ -28,7 +28,9 @@
                         </a>
                     </td>
                     <td>
+                        @isset($product->category)
                         {{$product->category->name}}
+                        @endisset
                     </td>
                     <td> <x-product-price :value="$product->price" /></td>
                     <td> <x-product-stock :value="$product->stock" /> </td>
@@ -51,4 +53,5 @@
             @endforeach
         </tbody>
     </table>
+    {{$products->links()}}
 @endsection

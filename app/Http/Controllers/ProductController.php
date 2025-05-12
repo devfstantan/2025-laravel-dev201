@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $categories = Category::orderBy('name')->get();
+        return view('products.create', compact('categories'));
     }
 
     /**
@@ -29,8 +31,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request['is_promo'] = isset($request['is_promo'] );
-        Product::create($request->all());
+        // 1- valider le formulaire:
+        $validated = $request->validate([
+            // 'title' => ['required','max:255','min:3'],
+            'title' => 'required|max:255|min:3',
+            'price' => 'required|numeric|min:0|max:1000000',
+            'stock' => 'required|integer|min:0|max:1000',
+            'description' => 'nullable',
+            'category_id' => 'nullable|exists:categories,id'
+        ]);
+        // 2- créer le produit
+        $validated['is_promo'] = $request->has('is_promo');
+        Product::create($validated);
+
         return to_route('products.index');
     }
 
@@ -40,7 +53,7 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::findOrFail($id);
-        return view('products.show',compact('product'));
+        return view('products.show', compact('product'));
     }
 
     /**
@@ -49,9 +62,9 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
-        return view('products.edit',compact('product'));
+        return view('products.edit', compact('product'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      */
@@ -59,9 +72,18 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        $request['is_promo'] = isset($request['is_promo'] );
-        $product->update($request->all());
-        
+        // 1- valider le formulaire:
+        $validated = $request->validate([
+            'title' => 'required|max:255|min:3',
+            'price' => 'required|numeric|min:0|max:1000000',
+            'stock' => 'required|integer|min:0|max:1000',
+            'description' => 'nullable',
+            'category_id' => 'nullable|exists:categories,id'
+        ]);
+        $validated['is_promo'] = $request->has('is_promo');
+        // 2- modifier le produit
+        $product->update($validated);
+
         return to_route('products.index');
     }
 
