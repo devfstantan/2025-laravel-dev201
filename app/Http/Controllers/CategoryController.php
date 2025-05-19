@@ -29,11 +29,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // $category = new Category();
-        // $category->name = $request->get('name');
-        // $category->save();
+        $validated = $request->validate([
+            'name' => 'required|min:3'
+        ]);
 
-        $category = Category::create($request->all());
+        $category = Category::create($validated);
 
         return to_route('categories.index');
     }
@@ -62,7 +62,11 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $category = Category::findOrFail($id);
-        $category->update($request->all());
+
+        $validated = $request->validate([
+            'name' => 'required|min:3'
+        ]);
+        $category->update($validated);
 
         return to_route('categories.index');
     }
