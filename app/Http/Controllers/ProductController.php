@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -29,26 +31,20 @@ class ProductController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * SOLID
+     * S : Single Responsability: function/component ms2oul 3la 7aja w7da
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        // 1- valider le formulaire:
-        $validated = $request->validate([
-            // 'title' => ['required','max:255','min:3'],
-            'title' => 'required|max:255|min:3',
-            'price' => 'required|numeric|min:0|max:1000000',
-            'stock' => 'required|integer|min:0|max:1000',
-            'image' => 'nullable|file|image|max:2048', // max:2Mo
-            'description' => 'nullable',
-            'category_id' => 'nullable|exists:categories,id'
-        ]);
-        // 2- uploader l'image dans le filesystem
+        $validated = $request->validated();
+
+        // 1- uploader l'image dans le filesystem
         if($request->has('image')){
             $path = $request->file('image')->store('products','public');
             $validated['image'] = "/storage/".$path;
         }
         
-        // 3- créer le produit
+        // 2- créer le produit
         $validated['is_promo'] = $request->has('is_promo');
         Product::create($validated);
 
@@ -58,18 +54,16 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
-        $product = Product::findOrFail($id);
         return view('products.show', compact('product'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Product $product)
     {
-        $product = Product::findOrFail($id);
         $categories = Category::orderBy('name')->get();
 
         return view('products.edit', compact('product','categories'));
@@ -78,19 +72,10 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
-        $product = Product::findOrFail($id);
+        $validated = $request->validated();
 
-        // 1- valider le formulaire:
-        $validated = $request->validate([
-            'title' => 'required|max:255|min:3',
-            'price' => 'required|numeric|min:0|max:1000000',
-            'stock' => 'required|integer|min:0|max:1000',
-            'image' => 'nullable|file|image|max:2048', // max:2Mo
-            'description' => 'nullable',
-            'category_id' => 'nullable|exists:categories,id'
-        ]);
         // 2- uploader l'image dans le filesystem
         if($request->has('image')){
             // DELETE old image if exists
@@ -112,10 +97,11 @@ class ProductController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * Depency ingection
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        Product::destroy($id);
+        $product->delete();
         return to_route('products.index');
     }
 }
