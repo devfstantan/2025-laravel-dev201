@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -37,10 +38,17 @@ class ProductController extends Controller
             'title' => 'required|max:255|min:3',
             'price' => 'required|numeric|min:0|max:1000000',
             'stock' => 'required|integer|min:0|max:1000',
+            'image' => 'nullable|file|image|max:2048', // max:2Mo
             'description' => 'nullable',
             'category_id' => 'nullable|exists:categories,id'
         ]);
-        // 2- créer le produit
+        // 2- uploader l'image dans le filesystem
+        if($request->has('image')){
+            $path = $request->file('image')->store('products','public');
+            $validated['image'] = "/storage/".$path;
+        }
+        
+        // 3- créer le produit
         $validated['is_promo'] = $request->has('is_promo');
         Product::create($validated);
 
@@ -79,11 +87,24 @@ class ProductController extends Controller
             'title' => 'required|max:255|min:3',
             'price' => 'required|numeric|min:0|max:1000000',
             'stock' => 'required|integer|min:0|max:1000',
+            'image' => 'nullable|file|image|max:2048', // max:2Mo
             'description' => 'nullable',
             'category_id' => 'nullable|exists:categories,id'
         ]);
+        // 2- uploader l'image dans le filesystem
+        if($request->has('image')){
+            // DELETE old image if exists
+            if($product->image){
+                $path = str_replace('/storage/','',$product->image);
+                Storage::disk('public')->delete($path);
+            }
+
+            $path = $request->file('image')->store('products','public');
+            $validated['image'] = "/storage/".$path;
+        }
+
+        // 3- modifier le produit
         $validated['is_promo'] = $request->has('is_promo');
-        // 2- modifier le produit
         $product->update($validated);
 
         return to_route('products.index');

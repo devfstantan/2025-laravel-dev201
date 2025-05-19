@@ -3,6 +3,9 @@
 
 @section('content')
     <h1>{{ $product->title }}</h1>
+    @isset($product->image)
+        <img src="{{$product->image}}" alt="">
+    @endisset
     <ul>
         <li>Prix: <x-product-price :value="$product->price" /></li>
         <li>Stock: <x-product-stock :value="$product->stock" /> </li>

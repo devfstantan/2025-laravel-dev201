@@ -3,7 +3,7 @@
 
 @section('content')
     <h1>Nouveau Produit</h1>
-    <form action="{{ route('products.store') }}" method="POST">
+    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         {{-- title --}}
         <div>
@@ -27,6 +27,14 @@
             <label for="stock">Stock</label>
             <input value="{{ old('stock') }}" type="number" name="stock" placeholder="saisir le stock">
             @error('stock')
+                <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+        {{-- image --}}
+        <div>
+            <label for="image">Image du produit</label>
+            <input value="{{ old('image') }}" type="file" name="image" placeholder="Attacher une image">
+            @error('image')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>

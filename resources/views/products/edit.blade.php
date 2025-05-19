@@ -3,7 +3,7 @@
 
 @section('content')
     <h1>Modifier Produit</h1>
-    <form action="{{ route('products.update',$product->id) }}" method="POST">
+    <form action="{{ route('products.update',$product->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         {{-- title --}}
@@ -26,6 +26,14 @@
         <div>
             <label for="stock">Stock</label>
             <input type="number" name="stock" placeholder="saisir le stock" value="{{$product->stock}}">
+        </div>
+        {{-- image --}}
+        <div>
+            <label for="image">Image du produit</label>
+            <input value="{{ old('image') }}" type="file" name="image" placeholder="Attacher une image">
+            @error('image')
+                <div class="error">{{ $message }}</div>
+            @enderror
         </div>
         {{-- description --}}
         <div>
