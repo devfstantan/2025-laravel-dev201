@@ -30,12 +30,27 @@
     </style>
 </head>
 <body class="m-auto">
-    <header>
+    <header >
         <nav>
             <a href="#">Produits</a>
             <a href="#">A propos</a>
             <a href="#">Contact</a>
         </nav>
+        <div>
+            @auth
+            {{-- logged in user --}}
+            USER : {{Auth::user()->name}} <br>
+            <form action="{{route('auth.logout')}}" method="POST">
+                @csrf
+                <input type="submit" value="Déconnexion">
+            </form>
+            @else
+            {{-- guest user --}}
+            <a href="{{route('auth.login.create')}}">Connexion</a>
+            <a href="{{route('auth.signup.create')}}">Inscription</a>
+            @endauth
+
+        </div>
     </header>
     <main>
         @yield('content')
