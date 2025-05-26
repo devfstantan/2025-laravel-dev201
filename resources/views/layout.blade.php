@@ -46,7 +46,7 @@
             </form>
             @else
             {{-- guest user --}}
-            <a href="{{route('auth.login.create')}}">Connexion</a>
+            <a href="{{route('login')}}">Connexion</a>
             <a href="{{route('auth.signup.create')}}">Inscription</a>
             @endauth
 

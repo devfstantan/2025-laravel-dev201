@@ -72,6 +72,6 @@ class AuthController extends Controller
         // 1- déconnecter l'user
         Auth::logout();
         // 2- redériger vers la page de login
-        return to_route('auth.login.create');
+        return to_route('login');
     }
 }

@@ -14,23 +14,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
 
-Route::resource('/categories',CategoryController::class);
-Route::resource('/products',ProductController::class);
+Route::middleware('loggedin')->group(function () {
+    Route::resource('/categories', CategoryController::class);
+    Route::resource('/products', ProductController::class);
 
-Route::get('/users', [UserController::class, 'index']);
-Route::resource('/orders',OrderController::class);
+    Route::resource('/orders', OrderController::class);
+});
+
+Route::middleware("admin")->group(function(){
+    Route::get('/users', [UserController::class, 'index']);
+});
 
 
 // Auth routes
-Route::get('/signup',[AuthController::class,'signupCreate'])
+Route::get('/signup', [AuthController::class, 'signupCreate'])
     ->name('auth.signup.create');
-Route::post('/signup',[AuthController::class,'signupStore'])
+Route::post('/signup', [AuthController::class, 'signupStore'])
     ->name('auth.signup.store');
 
-Route::get('/login',[AuthController::class,'loginCreate'])
-    ->name('auth.login.create');
-Route::post('/login',[AuthController::class,'loginStore'])
+Route::get('/login', [AuthController::class, 'loginCreate'])
+    ->name('login');
+Route::post('/login', [AuthController::class, 'loginStore'])
     ->name('auth.login.store');
 
-Route::post('/logout',[AuthController::class,'logout'])
+Route::post('/logout', [AuthController::class, 'logout'])
     ->name('auth.logout');
